@@ -1,4 +1,3 @@
-
 ;; Intialize package sources
 (require 'package)
 
