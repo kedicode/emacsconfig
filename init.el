@@ -8,7 +8,7 @@
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
-
+;;some changes
 ;; Initialize use-package on non-Linux platforms
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
