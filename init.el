@@ -1,106 +1,31 @@
-;; Intialize package sources
 (require 'package)
-
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			 ("org" . "https://orgmode.org/elpa/")
-			 ("elpa" . "https://elpa.gnu.org/packages/")))
-
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
-(unless package-archive-contents
-  (package-refresh-contents))
-;;some changes
-;; Initialize use-package on non-Linux platforms
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
-(require 'use-package)
-(setq use-package-always-ensure t)
 
+(unless (package-installed-p 'spacemacs-theme)
+  (package-refresh-contents)
+  (package-install 'spacemacs-theme))
 
-;; Packages
-(use-package ace-window
-  :ensure t
-  :init
-  (global-set-key [remap other-window] 'ace-window))
+;; Load my config from org
+(org-babel-load-file (expand-file-name "~/.emacs.d/config.org"))
 
-;;(setq ido-enable-flex-matching t)
-;;(setq ido-everywhere t)
-;;(ido-mode 1)
-
-;; Whichkey
-(use-package which-key
-  :ensure t
-  :config
-  (which-key-mode))
-
-;; search and swiper
-;; needs counsel as well
-(use-package counsel
-  :ensure t
-  )
-
-(use-package swiper
-:ensure try
-:config
-(progn
-(ivy-mode 1)
-(setq ivy-use-virtual-buffers t)
-(global-set-key "\C-s" 'swiper)
-(global-set-key (kbd "C-c C-r") 'ivy-resume)
-(global-set-key (kbd "<f6>") 'ivy-resume)
-(global-set-key (kbd "M-x") 'counsel-M-x)
-(global-set-key (kbd "C-x C-f") 'counsel-find-file)
-(global-set-key (kbd "<f1> f") 'counsel-describe-function)
-(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-(global-set-key (kbd "<f1> l") 'counsel-load-library)
-(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-(global-set-key (kbd "C-c g") 'counsel-git)
-(global-set-key (kbd "C-c j") 'counsel-git-grep)
-(global-set-key (kbd "C-c k") 'counsel-ag)
-(global-set-key (kbd "C-x l") 'counsel-locate)
-(global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-(define-key read-expression-map (kbd "C-r") 'counsel-expression-history)
-))
-;; sml-mode
-(use-package sml-mode
-  :ensure t
-  )
-
-;; Avy
-(use-package avy
-  :ensure t
-  :bind ("M-s" . avy-goto-char))
-
-;; Statups display values
-(setq inhibit-startup-message t)
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(tooltip-mode -1)
-(set-fringe-mode 10)
-
-(menu-bar-mode -1)
-
-;; Set up visible bell
-(setq visible-bell t)
-
-;; Fonts
-(set-face-attribute 'default nil
-		    :font "Fira Code Retina"
-		    :height 100)
-
-;; Theme
-(load-theme 'tango-dark)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(spacemacs-dark))
+ '(custom-safe-themes
+   '("bbb13492a15c3258f29c21d251da1e62f1abb8bbd492386a673dcfab474186af" "eab123a5ed21463c780e17fc44f9ffc3e501655b966729a2d5a2072832abd3ac" "7fd8b914e340283c189980cd1883dbdef67080ad1a3a9cc3df864ca53bdc89cf" default))
  '(package-selected-packages
-   (quote
-    (try counsel sml-mode which-key ace-window use-package))))
+   '(orderless marginalia vertico diminish spaceline company dashboard rainbow-delimiters rainbow-delimters hungry-delete switch-window avy smex org-bullets beacon spacemacs-theme which-key)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:inherit nil :extend nil :stipple nil :background "#262626" :foreground "#b2b2b2" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight regular :height 100 :width normal :foundry "PfEd" :family "firacode"))))
+ '(marginalia-documentation ((t (:foreground "lawn green" :inherit completions-annotations))))
+ '(marginalia-file-name ((t (:foreground "lawn green" :inherit marginalia-documentation)))))

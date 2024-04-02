@@ -1,0 +1,245 @@
+* UI Changes
+** Modeline
+#+begin_src emacs-lisp
+  (use-package spaceline
+    :ensure t
+    :config
+    (require 'spaceline-config)
+    (setq powerline-default-seperator (quote arrow))
+    (spaceline-spacemacs-theme))
+
+  (use-package diminish
+    :ensure t
+    :init
+    (diminish 'hungry-delete-mode)
+    (diminish 'beacon-mode)
+    (diminish 'subword-mode)
+    (diminish 'which-key-mode))
+#+end_src
+** Hide the defaults elements (scroll, menu, tool) bars
+#+begin_src emacs-lisp
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+#+end_src
+** Don't need the startup message
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+#+end_src
+** Pretty Symbols
+#+begin_src emacs-lisp
+  (when window-system (global-prettify-symbols-mode t))
+#+end_src
+** Switching windows
+#+begin_src emacs-lisp
+  (use-package switch-window
+    :ensure t
+    :config
+    (setq switch-window-input-style 'minibuffer)
+    (setq switch-window-increase 4)
+    (setq switch-window-threshold 2)
+    (setq switch-window-shortcut-style 'qwerty)
+    (setq switch-window-qwerty-shortcuts
+	  '("a" "s" "d" "f" "j" "k" "l"))
+    :bind
+    ([remap other-window] . switch-window))
+#+end_src
+* Terminal
+** Setting default shell to bash
+#+begin_src emacs-lisp
+  (defvar my-term-shell "/bin/bash")
+  (defadvice ansi-term (before force-bash)
+    (interactive (list my-term-shell)))
+  (ad-activate 'ansi-term)
+  (global-set-key (kbd "<s-return>") 'ansi-term)
+#+end_src
+
+* Org
+** Org snippets
+#+begin_src emacs-lisp
+  (add-to-list 'org-structure-template-alist
+	       '("el" . "src emacs-lisp\n"))
+#+end_src
+** Org Bullets
+#+begin_src emacs-lisp
+  (use-package org-bullets
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
+#+end_src
+* Global Packages
+** Orderless
+#+begin_src emacs-lisp
+  (use-package orderless
+    :ensure t
+    :config
+    (setq completion-styles '(orderless basic)))
+#+end_src
+** Vertico
+#+begin_src emacs-lisp
+  (use-package vertico
+    :ensure t
+    :config
+    (setq vertico-cycle t)
+    (setq vertico-resize nil)
+    (vertico-mode 1))
+#+end_src
+** Maginalia
+#+begin_src emacs-lisp
+  (use-package marginalia
+    :ensure t
+    :config
+    (marginalia-mode 1))
+#+end_src
+** Eglot
+#+begin_src emacs-lisp
+  (use-package eglot
+    :ensure t
+    :init
+    (setq eglot-server-programs '((c-mode ) "clangd"))
+    (add-hook 'c-mode-hook 'eglot-ensure))
+#+end_src
+** Company Mode
+#+begin_src emacs-lisp
+  (use-package company
+    :ensure t
+    :init
+    (add-hook 'after-init-hook 'global-company-mode))
+#+end_src
+** Dashboard
+#+begin_src emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook)
+    (setq initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name)))
+    (setq dashboard-items '((recents . 10)))
+    (setq dashboard-banner-logo-title "Goodday Keenan"))
+
+#+end_src
+** Rainbow delimters
+#+begin_src emacs-lisp
+  (use-package rainbow-delimiters
+    :ensure t
+    :init
+    (rainbow-delimiters-mode 1))
+#+end_src
+** Whichkey
+#+begin_src emacs-lisp
+  (use-package which-key
+    :ensure t
+    :init
+    (which-key-mode))
+#+end_src
+** Beacon
+#+begin_src emacs-lisp
+  (use-package beacon
+    :ensure t
+    :init
+    (beacon-mode 1))
+#+end_src
+** Ido
+*** Main Package
+# #+begin_src emacs-lisp
+#   (setq ido-enable-flex-matching nil)
+#   (setq ido-create-new-buffer 'always)
+#   (setq ido-everywhere t)
+#   (ido-mode 1)
+#   (global-set-key (kbd "C-x C-b") 'ido-switch-buffer)
+# #+end_src
+*** SMEX
+#+begin_src emacs-lisp
+  (use-package smex
+    :ensure t
+    :init
+    (smex-initialize)
+    :bind
+    ("M-x" . smex))
+#+end_srcB
+** Ibuffer
+# #+begin_src emacs-lisp
+#   (global-set-key (kbd "C-x b") 'ibuffer)
+# #+end_src
+** Avy
+#+begin_src emacs-lisp
+  (use-package avy
+    :ensure t
+    :bind
+    ("M-s" . avy-goto-char))
+#+end_src
+** Electric Pair Mode
+#+begin_src emacs-lisp
+  (electric-pair-mode 1)
+#+end_src
+** Hungry Delete Mode
+#+begin_src emacs-lisp
+  (use-package hungry-delete
+    :ensure t
+    :config
+    (setq hungry-delete-join-reluctantly t)
+    (global-hungry-delete-mode))
+#+end_src
+* QOS changes
+** Show lines and columns
+#+begin_src emacs-lisp
+  (line-number-mode 1)
+  (column-number-mode 1)
+#+end_src
+** just y or n
+#+begin_src emacs-lisp
+  (defalias 'yes-or-no-p 'y-or-n-p)
+#+end_src
+** smooth scroll
+#+begin_src emacs-lisp
+  (setq scroll-conservatively 100)
+#+end_src
+** No ring bell
+#+begin_src emacs-lisp
+  (setq ring-bell-function 'ignore)
+#+end_src
+** Highlight mode is nice to have
+#+begin_src emacs-lisp
+  (when window-system (global-hl-line-mode t))
+#+end_src
+** Subword
+#+begin_src emacs-lisp
+  (global-subword-mode 1)
+#+end_src
+* Custom functions
+** Kills and such
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-c w l") 'avy-copy-line)
+  (defun kill-all-buffers ()
+    (interactive)
+    (mapc 'kill-buffer (buffer-list)))
+#+end_src
+** Buffers
+#+begin_src emacs-lisp
+  (defun always-kill-curr-buffer ()
+    (interactive)
+    (kill-buffer (current-buffer)))
+  (global-set-key (kbd "C-x k") 'always-kill-curr-buffer)
+#+end_src
+** Edit
+#+begin_src emacs-lisp
+  (defun config-visit ()
+    (interactive)
+    (find-file "~/.emacs.d/config.org"))
+  (global-set-key (kbd "C-c e") 'config-visit)
+#+end_src
+** Reload
+#+begin_src emacs-lisp
+  (defun reload-config ()
+    (interactive)
+    (org-babel-load-file (expand-file-name "~/.emacs.d/config.org")))
+  (global-set-key (kbd "C-c r") 'reload-config) 
+#+end_src
+** Kill word
+#+begin_src emacs-lisp
+  (defun kill-whole-word ()
+    (interactive)
+    (backward-word)
+    (kill-word 1))
+  (global-set-key (kbd "M-d") 'kill-whole-word)
+#+end_src
+* Programming Modes
