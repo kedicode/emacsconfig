@@ -68,6 +68,22 @@
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode))))
 #+end_src
 * Global Packages
+** Magit
+#+begin_src emacs-lisp
+  (use-package magit
+    :ensure t)
+#+end_src
+** Multiple Cursors
+#+begin_src emacs-lisp
+  (use-package multiple-cursors
+    :ensure t
+    :config (multiple-cursors-mode))
+#+end_src
+** Web-mode
+#+begin_src emacs-lisp
+  (use-package web-mode
+    :ensure t)
+#+end_src
 ** Orderless
 #+begin_src emacs-lisp
   (use-package orderless
